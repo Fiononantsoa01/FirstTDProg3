@@ -5,10 +5,6 @@ public class Category {
         this.id = id;
         this.name = name;
     }
-
-    private int id;
-    private String name;
-
     public int getId() {
         return id;
     }
@@ -23,5 +19,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

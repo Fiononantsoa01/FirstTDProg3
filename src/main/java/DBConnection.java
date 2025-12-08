@@ -2,7 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBConnection {
-    private final String DBURL="jdbc:postgresql://localhost:5432/Product_management_db";
+    private final String DBURL="jdbc:postgresql://localhost:5432/product_management_db";
     private final String DBUSER="product_manager_user";
     private final String DBPASS="123456";
 
