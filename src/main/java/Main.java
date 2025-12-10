@@ -1,4 +1,7 @@
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -23,7 +26,8 @@ public class Main {
         retriever.getProductsByCriteria("iphone","mobile",null,null)
                 .forEach(System.out::println);
         System.out.println("find 2024-02-01 2024-03-01");
-        retriever.getProductsByCriteria(null,null,"2024-02-01","2024-03-01")
+        Instant after1 = LocalDateTime.of(2024,2,1,2,2).toInstant(ZoneOffset.UTC);
+        retriever.getProductsByCriteria(null,null,after1,null)
                 .forEach(System.out::println);
         System.out.println("find samsung bureau");
         retriever.getProductsByCriteria("samsung","bureau",null,null)
@@ -32,7 +36,8 @@ public class Main {
         retriever.getProductsByCriteria("sony","informatique",null,null)
                 .forEach(System.out::println);
         System.out.println("find audio 2024-01-01 2024-12-01");
-        retriever.getProductsByCriteria(null,"audio","2024-01-01","2024-12-01")
+        Instant after= LocalDateTime.of(2024,1,1,12,30).toInstant(ZoneOffset.UTC);
+        retriever.getProductsByCriteria(null,"audio",after,null)
                 .forEach(System.out::println);
         System.out.println("find all null");
         retriever.getProductsByCriteria(null,null,null,null)

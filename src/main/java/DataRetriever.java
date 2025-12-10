@@ -36,7 +36,7 @@ return categories;
         String sql="select p.id ,p.name, p.price,p.creation_datetime,c.id AS category_id ,c.name AS category_name from Product p LEFT JOIN Product_category c ON p.id= c.product_id ORDER BY p.id LIMIT ? OFFSET ?";
         try (PreparedStatement prs= db.getConnection().prepareStatement(sql)){
            prs.setInt(1,size);
-           prs.setInt(2,page);
+           prs.setInt(2,offset);
                 try(ResultSet result= prs.executeQuery()){
                     while (result.next()) {
                         Product product= new Product(result.getInt("id"),result.getString("name"),result.getFloat("price"),result.getTimestamp("creation_datetime").toInstant(),new Category(result.getInt("category_id"),result.getString("category_name")));
@@ -55,11 +55,13 @@ return categories;
         }
 
 
+
        return productList;
     }
-public  List<Product>getProductsByCriteria(String productName, String categoryName, String creationMinStr, String creationMaxStr) throws SQLException {
+public  List<Product>getProductsByCriteria(String productName, String categoryName, Instant creationMin, Instant creationMax) throws SQLException {
        DBConnection db = new DBConnection();
        db.connect();
+       /*
     Instant creationMin = null;
     Instant creationMax = null;
 
@@ -69,11 +71,11 @@ public  List<Product>getProductsByCriteria(String productName, String categoryNa
 
     if (creationMaxStr != null) {
         creationMax = Instant.parse(creationMaxStr + "T23:59:59Z");
-    }
+    }*/
         List<Product> filteredProductList = new ArrayList<>();
             String sql="Select p.id,p.name,p.price,p.creation_datetime,c.id as category_id ,c.name as category_name from Product p inner join Product_category c on p.id=c.product_id ";
             if (productName!=null ) sql+=" and p.name Ilike ?";
-            if(categoryName !=null ) sql+=" and c.name like ?";
+            if(categoryName !=null ) sql+=" and c.name Ilike ?";
             if (creationMin!=null) sql+=" and creation_datetime >= ?";
             if (creationMax!=null) sql+=" and creation_datetime <= ?";
             try(PreparedStatement stmt=db.getConnection().prepareStatement(sql)){
@@ -101,8 +103,8 @@ public  List<Product>getProductsByCriteria(String productName, String categoryNa
             }
             return  filteredProductList;
 }
-public  List<Product> getProductsByCriteria(String productName, String categoryName, String creationMinStr, String creationMaxStr, int page , int size) throws SQLException {
-        List<Product> filteredProductList = getProductsByCriteria(productName,categoryName,creationMinStr,creationMaxStr);
+public  List<Product> getProductsByCriteria(String productName, String categoryName, Instant creationMin, Instant creationMax, int page , int size) throws SQLException {
+        List<Product> filteredProductList = getProductsByCriteria(productName,categoryName,creationMin,creationMax);
     int firstIndex=(page-1)*size;
     int endIndex=Math.min(firstIndex+size,filteredProductList.size());
     if (firstIndex>=filteredProductList.size()) { return new ArrayList<>();}
